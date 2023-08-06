@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title});
   final String title;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -35,55 +35,52 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<List<dynamic>> _data = [];
-  String? _tsrName;
-  String? _fileName;
-  String? filePath;
-  String? checky;
-  // String selectedItem = 'TSR';
-  dynamic currentStep = 0;
   List<List<dynamic>> tsr2 = [];
+
+  String? filePath;
+  String? csvName;
   String? tsrRep;
 
-  String? linl;
-    @override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Spacer(),
-            Text(style: TextStyle(fontWeight: FontWeight.bold),'Version: 0.0.1'),
+            Text(style: TextStyle(fontWeight: FontWeight.bold),'Dev-Version: 0.0.1'),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
+        onPressed: _pickFile,
         tooltip: 'Upload',
         child: const Icon(Icons.upload),
       ),
     );
   }
     void _pickFile() async {
-      final result = await FilePicker.platform.pickFiles(
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowMultiple: false,
-        allowedExtensions: ['csv'],
+        allowedExtensions: ['çsv'],
+
       );
 
-      // if no file is picked
-      if (result == null) return;
-      //
-      // we will log the name, size and path of the
-      // first picked file (if multiple are selected)
-      //
-      // debugPrint('Niko hapa: ${result.files.first.name}'); //name of csv
+      // if (result != null) {
+      //   File file = File(result.files.first.path);
+      // } else {
+      //   // User canceled the picker
+      // }
 
-      checky = result.files.first.name; //name of csv
+      if (result == null) return;
+      csvName = result.files.first.name; //name of csv
       filePath = result.files.first.path!;
 
       final input = File(filePath!).openRead();
@@ -92,17 +89,11 @@ class _MyHomePageState extends State<MyHomePage> {
           .transform(const CsvToListConverter())
           .toList();
 
-      // debugPrint('Niko Pale: $fields'); //actual data
-      // debugPrint('checky $checky'); //name of csv
-
       tsrRep = fields[4].toSet().toString();
-      // debugPrint('please work $tsrRep');
 
       setState(
             () {
-          _fileName = checky; //file name
           _data = fields; //actual data
-          tsr2 = tsr2; //TODO: fix remove repeated tsr names
         },
       );
     }
