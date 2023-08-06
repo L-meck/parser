@@ -36,15 +36,16 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<List<dynamic>> data = [];
   List<List<dynamic>> tsr2 = [];
+  List<String> filteredArray = [];
 
 
-  String? tsr, filePath, csvName, csvNameD, tsrName;
+  String? tsr, filePath, csvName, csvNameD, tsrName, tsrNamey;
 
-  // Set<List<dynamic>>  uniqueItems = data.toSet();
-  // List<String> uniqueList = uniqueItems.toList();
-  // List<String> uniqueList = uniqueItems.map((item) => item.join(', ')).toList();
-  // List<List<dynamic>> uniqueItems = sett.toSet().toList();
   @override
+  void initState() {
+    super.initState();
+    filteredArray = data.toSet().cast<String>().toList(); // Remove duplicates
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -87,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     onTap: () {
                     setState(() {
-                      tsrName = item[5].toString();
+                      tsrName = data[5].toString();
                       debugPrint(tsrName);
                     });
                     Navigator.pop(context);
@@ -97,7 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
               }).toSet().toList(), //.toSet().toList(),
             onChanged: (String? val) {
               // setState(() {
-                // tsrNamey = tsrRep.toString();
+                // val = tsr.toString();
+                // debugPrint(val);
               // });
             },
           ),
