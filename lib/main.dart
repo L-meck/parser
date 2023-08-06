@@ -37,10 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<List<dynamic>> _data = [];
   List<List<dynamic>> tsr2 = [];
 
-  String? filePath;
-  String? csvName;
-  String? tsrRep;
-
+  String? tsrRep, filePath, csvName, csvNameD;
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +46,17 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Spacer(),
-            Text(style: TextStyle(fontWeight: FontWeight.bold),'Dev-Version: 0.0.1'),
+              csvNameD != null?
+                   Text( 'FILENAME: $csvNameD',
+                  style: const TextStyle(fontWeight: FontWeight.bold))
+                  : const Text("no file selected,\nkindly pick a file",
+                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+            const Spacer(),
+            const Text(style: TextStyle(fontWeight: FontWeight.bold),'Dev-Version: 0.0.1'),
           ],
         ),
       ),
@@ -72,12 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
         allowedExtensions: ['csv'],
       );
 
-      // if (result != null) {
-      //   File file = File(result.files.first.path);
-      // } else {
-      //   // User canceled the picker
-      // }
-
       if (result == null) return;
       csvName = result.files.first.name; //name of csv
       filePath = result.files.first.path!;
@@ -92,7 +88,8 @@ class _MyHomePageState extends State<MyHomePage> {
       debugPrint('$csvName');
       setState(
             () {
-          _data = fields; //actual data
+              csvNameD = csvName;
+              _data = fields; //actual data
         },
       );
     }
