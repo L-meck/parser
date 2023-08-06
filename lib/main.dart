@@ -46,19 +46,28 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-              csvNameD != null?
-                   Text( 'FILENAME: $csvNameD',
-                  style: const TextStyle(fontWeight: FontWeight.bold))
-                  : const Text("no file selected,\nkindly pick a file",
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
-            const Spacer(),
-            const Text(style: TextStyle(fontWeight: FontWeight.bold),'Dev-Version: 0.0.1'),
-          ],
-        ),
+      body: _data != 'null' ?
+          ListView.builder(
+        itemCount: _data.length,
+        itemBuilder: (_, index){
+          return Column(
+            children: [
+                  Card(
+              margin: const EdgeInsets.all(3),
+            color: index==0 ? Colors.amberAccent : Colors.white,
+            child: ListTile(
+              leading: Text(_data[index][0].toString()),
+              subtitle: Text(_data[index][1].toString()),
+              title: Text(_data[index][2].toString()),
+              trailing: Text(_data[index][3].toString()),
+            ),
+          ) // const Text(style: TextStyle(fontWeight: FontWeight.bold),'Dev-Version: 0.0.1')
+            ]
+          );
+        }
+      ) : const Center(
+        child: Text("no file selected,\nkindly pick a file",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _pickFile,
