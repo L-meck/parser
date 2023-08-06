@@ -34,11 +34,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<List<dynamic>> _data = [];
+  List<List<dynamic>> data = [];
   List<List<dynamic>> tsr2 = [];
 
-  String? tsrRep, filePath, csvName, csvNameD;
 
+  String? tsr, filePath, csvName, csvNameD, tsrName;
+
+  // Set<List<dynamic>>  uniqueItems = data.toSet();
+  // List<String> uniqueList = uniqueItems.toList();
+  // List<String> uniqueList = uniqueItems.map((item) => item.join(', ')).toList();
+  // List<List<dynamic>> uniqueItems = sett.toSet().toList();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,28 +51,58 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: _data != 'null' ?
-          ListView.builder(
-        itemCount: _data.length,
-        itemBuilder: (_, index){
-          return Column(
-            children: [
-                  Card(
-              margin: const EdgeInsets.all(3),
-            color: index==0 ? Colors.amberAccent : Colors.white,
-            child: ListTile(
-              leading: Text(_data[index][0].toString()),
-              subtitle: Text(_data[index][1].toString()),
-              title: Text(_data[index][2].toString()),
-              trailing: Text(_data[index][3].toString()),
-            ),
-          ) // const Text(style: TextStyle(fontWeight: FontWeight.bold),'Dev-Version: 0.0.1')
-            ]
-          );
-        }
-      ) : const Center(
-        child: Text("no file selected,\nkindly pick a file",
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+      // body: ListView.builder(
+      //   itemCount: _data.length,
+      //   itemBuilder: (_, index){
+      //     return Column(
+      //       children: [
+      //             Card(
+      //         margin: const EdgeInsets.all(3),
+      //       color: index==0 ? Colors.amberAccent : Colors.white,
+      //       child: ListTile(
+      //         leading: Text(_data[index][0].toString()),
+      //         subtitle: Text(_data[index][1].toString()),
+      //         title: Text(_data[index][2].toString()),
+      //         trailing: Text(_data[index][3].toString()),
+      //       ),
+      //     ) // const Text(style: TextStyle(fontWeight: FontWeight.bold),'Dev-Version: 0.0.1')
+      //       ]
+      //     );
+      //   }
+      //       ),
+      body: Column(
+        children: [
+        Center(
+          child: DropdownButton(
+              icon: const Icon(Icons.keyboard_arrow_down),
+              items: data.map((item) {
+                return DropdownMenuItem(
+                  value: tsr,
+                  child: GestureDetector(
+                    child: Text(
+                      item[5].toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    onTap: () {
+                    setState(() {
+                      tsrName = item[5].toString();
+                      debugPrint(tsrName);
+                    });
+                    Navigator.pop(context);
+                  },
+                  ),
+                );
+              }).toSet().toList(), //.toSet().toList(),
+            onChanged: (String? val) {
+              // setState(() {
+                // tsrNamey = tsrRep.toString();
+              // });
+            },
+          ),
+        ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _pickFile,
@@ -93,12 +128,13 @@ class _MyHomePageState extends State<MyHomePage> {
           .transform(const CsvToListConverter())
           .toList();
 
-      tsrRep = fields[4].toSet().toString();
+      tsr = fields[5].toSet().toString();
       debugPrint('$csvName');
       setState(
             () {
               csvNameD = csvName;
-              _data = fields; //actual data
+              data = fields; //actual data
+              // sett = fields;
         },
       );
     }
