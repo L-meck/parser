@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MyHomePage(title: 'e/csv parser'),
+      home: const MyHomePage(title: 'e/csv parser'),
     );
   }
 }
@@ -69,8 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowMultiple: false,
-        allowedExtensions: ['çsv'],
-
+        allowedExtensions: ['csv'],
       );
 
       // if (result != null) {
@@ -90,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
           .toList();
 
       tsrRep = fields[4].toSet().toString();
-
+      debugPrint('$csvName');
       setState(
             () {
           _data = fields; //actual data
