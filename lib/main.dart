@@ -46,6 +46,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     filteredArray = data.toSet().cast<String>().toList(); // Remove duplicates
   }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -70,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
       //       ]
       //     );
       //   }
-      //       ),
+      // ),
       body: Column(
         children: [
         Center(
